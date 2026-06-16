@@ -63,9 +63,11 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      {/* Usuario */}
-      <button
-        type="button"
+      {/* Usuario → Configuración */}
+      <Link
+        href="/configuracion"
+        onClick={onNavigate}
+        aria-current={pathname === "/configuracion" ? "page" : undefined}
         className="mt-auto flex w-full items-center gap-3 border-t border-hairline px-1 pb-1 pt-4 text-left transition-opacity hover:opacity-80"
       >
         <span className="flex size-[34px] shrink-0 items-center justify-center rounded-full border border-hairline-strong bg-elevated text-[13px] font-bold">
@@ -78,7 +80,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
           <span className="block text-[11px] text-muted">{APP_PLAN}</span>
         </span>
         <Settings className="ml-auto size-4 text-muted" strokeWidth={2} />
-      </button>
+      </Link>
     </>
   );
 }

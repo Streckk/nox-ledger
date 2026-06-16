@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import { CreditCardsList } from "@/features/cards/components/credit-cards-list";
+import { CardsView } from "@/features/cards/components/cards-view";
 
 export const metadata: Metadata = { title: "Tarjetas — Nox Ledger" };
 
 export default function TarjetasPage() {
-  return (
-    <div className="max-w-2xl">
-      <CreditCardsList />
-    </div>
-  );
+  return <CardsView />;
 }

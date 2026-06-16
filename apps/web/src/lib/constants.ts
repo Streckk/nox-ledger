@@ -18,19 +18,19 @@ export interface NavItem {
   label: string;
   href: string;
   icon: LucideIcon;
-  /** Subtítulo mostrado en el header al estar en la sección. */
-  eyebrow: string;
+  /** Etiqueta corta para el eyebrow del header (por defecto usa `label`). */
+  eyebrow?: string;
 }
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutGrid, eyebrow: "Resumen general" },
-  { label: "Ingresos", href: "/ingresos", icon: TrendingUp, eyebrow: "Tus fuentes de ingreso" },
-  { label: "Gastos fijos", href: "/gastos", icon: Receipt, eyebrow: "Gastos recurrentes" },
-  { label: "Tarjetas", href: "/tarjetas", icon: CreditCard, eyebrow: "Tus tarjetas de crédito" },
-  { label: "Compras a meses", href: "/compras", icon: CalendarClock, eyebrow: "Meses sin intereses" },
-  { label: "Simulador de compra", href: "/simulador", icon: Sparkles, eyebrow: "¿Puedo comprar esto?" },
-  { label: "Proyecciones", href: "/proyecciones", icon: LineChart, eyebrow: "Proyección financiera" },
-  { label: "Configuración", href: "/configuracion", icon: Settings, eyebrow: "Cuenta y preferencias" },
+  { label: "Ingresos", href: "/ingresos", icon: TrendingUp },
+  { label: "Gastos fijos", href: "/gastos", icon: Receipt },
+  { label: "Tarjetas", href: "/tarjetas", icon: CreditCard },
+  { label: "Compras a meses", href: "/compras", icon: CalendarClock },
+  { label: "Simulador de compra", href: "/simulador", icon: Sparkles },
+  { label: "Proyecciones", href: "/proyecciones", icon: LineChart },
+  { label: "Configuración", href: "/configuracion", icon: Settings },
 ];
 
 /** Plazos predefinidos (meses) que ofrece el simulador para comparar. */

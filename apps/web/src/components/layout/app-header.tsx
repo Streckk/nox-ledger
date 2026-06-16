@@ -18,8 +18,7 @@ export function AppHeader() {
     NAV_ITEMS.find(
       (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
     ) ?? NAV_ITEMS[0];
-  const isDashboard = activeItem.href === "/dashboard";
-  const title = isDashboard ? `Buenas tardes, ${firstName}` : activeItem.label;
+  const eyebrow = activeItem.eyebrow ?? activeItem.label;
 
   return (
     <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-hairline bg-canvas/80 px-4 py-4 backdrop-blur-xl sm:gap-6 sm:px-10 sm:py-5">
@@ -35,10 +34,10 @@ export function AppHeader() {
 
       <div className="min-w-0 flex-1">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-          {activeItem.eyebrow}
+          {eyebrow}
         </p>
         <h1 className="mt-0.5 truncate text-xl font-extrabold tracking-tight sm:text-2xl">
-          {title}
+          Buenas tardes, {firstName}
         </h1>
       </div>
 
