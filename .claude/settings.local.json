@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm lint *)",
+      "Bash(grep -E \" next$| react$\")",
+      "Bash(pnpm install *)",
+      "Bash(pnpm build *)",
+      "Bash(mkdir -p \"\\(app\\)/dashboard\" \"\\(auth\\)/login\" \"\\(auth\\)/register\")",
+      "Bash(mv dashboard/page.tsx \"\\(app\\)/dashboard/page.tsx\")",
+      "Bash(rmdir dashboard *)"
+    ]
+  }
+}

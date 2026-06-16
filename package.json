@@ -1,0 +1,11 @@
+{
+  "name": "nox-ledger",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @nox-ledger/web dev",
+    "build": "pnpm --filter @nox-ledger/web build",
+    "start": "pnpm --filter @nox-ledger/web start",
+    "lint": "pnpm --filter @nox-ledger/web lint"
+  }
+}

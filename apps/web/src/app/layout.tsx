@@ -1,0 +1,35 @@
+import type { Metadata } from "next";
+import { Archivo, Space_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { APP_NAME } from "@/lib/constants";
+import "./globals.css";
+
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+export const metadata: Metadata = {
+  title: `${APP_NAME} — Finanzas personales`,
+  description:
+    "Controla tus tarjetas, compras a meses y proyección de ahorro con Nox Ledger.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="es" suppressHydrationWarning>
+      <body className={`${archivo.variable} ${spaceMono.variable} antialiased`}>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  );
+}
