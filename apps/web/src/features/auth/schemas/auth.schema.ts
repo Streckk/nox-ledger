@@ -23,3 +23,10 @@ export const registerSchema = z
   });
 
 export type RegisterValues = z.infer<typeof registerSchema>;
+
+/** Esquema del formulario de recuperación de contraseña. */
+export const forgotPasswordSchema = z.object({
+  email: z.email("Ingresa un correo válido"),
+});
+
+export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;

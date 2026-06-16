@@ -12,7 +12,7 @@ export function DashboardView() {
 
       <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-[1.6fr_1fr]">
         <SavingsProjectionChart />
-        <CreditCardsList />
+        <CreditCardsList viewAllHref="/tarjetas" />
       </div>
 
       <InstallmentsTable />

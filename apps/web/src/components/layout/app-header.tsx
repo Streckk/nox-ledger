@@ -1,16 +1,25 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Calendar, Menu, Moon, Plus, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CURRENT_PERIOD_LABEL } from "@/lib/constants";
+import { CURRENT_PERIOD_LABEL, NAV_ITEMS } from "@/lib/constants";
 import { currentUser } from "@/mocks/financial-dashboard.mock";
 import { useSidebar } from "./use-sidebar";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();
   const { toggle } = useSidebar();
+  const pathname = usePathname();
   const firstName = currentUser.name.split(" ")[0];
+
+  const activeItem =
+    NAV_ITEMS.find(
+      (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+    ) ?? NAV_ITEMS[0];
+  const isDashboard = activeItem.href === "/dashboard";
+  const title = isDashboard ? `Buenas tardes, ${firstName}` : activeItem.label;
 
   return (
     <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-hairline bg-canvas/80 px-4 py-4 backdrop-blur-xl sm:gap-6 sm:px-10 sm:py-5">
@@ -26,10 +35,10 @@ export function AppHeader() {
 
       <div className="min-w-0 flex-1">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-          Resumen general
+          {activeItem.eyebrow}
         </p>
         <h1 className="mt-0.5 truncate text-xl font-extrabold tracking-tight sm:text-2xl">
-          Buenas tardes, {firstName}
+          {title}
         </h1>
       </div>
 
