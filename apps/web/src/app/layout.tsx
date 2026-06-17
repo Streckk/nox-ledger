@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Space_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ViewTransitions } from "next-view-transitions";
+import { Providers } from "@/components/providers";
 import { APP_NAME } from "@/lib/constants";
 import "./globals.css";
 
@@ -26,10 +27,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
-      <body className={`${archivo.variable} ${spaceMono.variable} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="es" suppressHydrationWarning>
+        <body className={`${archivo.variable} ${spaceMono.variable} antialiased`}>
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

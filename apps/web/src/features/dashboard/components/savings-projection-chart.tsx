@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format-currency";
+import { useHydrated } from "@/lib/use-hydrated";
 import { savingsProjection } from "@/mocks/financial-dashboard.mock";
 import type { ProjectionPoint } from "@/types/dashboard";
 
@@ -41,6 +42,8 @@ function ChartTooltip({
 }
 
 export function SavingsProjectionChart() {
+  const hydrated = useHydrated();
+
   return (
     <Card className="p-6">
       <CardHeader>
@@ -61,6 +64,7 @@ export function SavingsProjectionChart() {
       </CardHeader>
 
       <div className="mt-4 h-[230px] w-full">
+        {hydrated && (
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={savingsProjection}
@@ -109,6 +113,7 @@ export function SavingsProjectionChart() {
             />
           </ComposedChart>
         </ResponsiveContainer>
+        )}
       </div>
     </Card>
   );

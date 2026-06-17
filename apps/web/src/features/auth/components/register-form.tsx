@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMeQuery, useRegisterMutation } from "@/gql";
 import { PasswordInput } from "./password-input";
 import { PasswordStrengthMeter } from "./password-strength-meter";
 import { GoogleButton } from "./google-button";
@@ -13,12 +15,15 @@ import { Field, AuthDivider } from "./field";
 import { registerSchema, type RegisterValues } from "../schemas/auth.schema";
 
 export function RegisterForm() {
-  const router = useRouter();
+  const router = useTransitionRouter();
+  const queryClient = useQueryClient();
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
@@ -26,9 +31,29 @@ export function RegisterForm() {
 
   const password = useWatch({ control, name: "password" }) ?? "";
 
-  // Sin backend todavía: simulamos el alta y entramos al dashboard.
-  const onSubmit = handleSubmit(() => {
-    router.push("/dashboard");
+  const registerMutation = useRegisterMutation({
+    onSuccess: async () => {
+      // Precargamos `me` antes de navegar para evitar el spinner del guard.
+      try {
+        await queryClient.fetchQuery({
+          queryKey: useMeQuery.getKey(),
+          queryFn: useMeQuery.fetcher(),
+        });
+      } catch {
+        // El AuthGuard se encarga si algo falla.
+      }
+      router.push("/dashboard");
+    },
+    onError: () => {
+      setServerError("No se pudo crear la cuenta. ¿El correo ya está registrado?");
+    },
+  });
+
+  const onSubmit = handleSubmit((values) => {
+    setServerError(null);
+    registerMutation.mutate({
+      input: { name: values.name, email: values.email, password: values.password },
+    });
   });
 
   return (
@@ -45,6 +70,12 @@ export function RegisterForm() {
         <AuthDivider label="o con tu correo" />
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+          {serverError && (
+            <p className="rounded-xl border border-negative/20 bg-negative/10 px-3.5 py-2.5 text-[13px] font-medium text-negative">
+              {serverError}
+            </p>
+          )}
+
           <Field label="Nombre completo" htmlFor="name" error={errors.name?.message}>
             <Input
               id="name"
@@ -87,8 +118,13 @@ export function RegisterForm() {
             />
           </Field>
 
-          <Button type="submit" size="lg" className="mt-1 w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Creando cuenta…" : "Crear cuenta"}
+          <Button
+            type="submit"
+            size="lg"
+            className="mt-1 w-full"
+            disabled={registerMutation.isPending}
+          >
+            {registerMutation.isPending ? "Creando cuenta…" : "Crear cuenta"}
           </Button>
         </form>
       </div>

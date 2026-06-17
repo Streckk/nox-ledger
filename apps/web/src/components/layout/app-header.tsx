@@ -5,14 +5,15 @@ import { useTheme } from "next-themes";
 import { Calendar, Menu, Moon, Plus, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CURRENT_PERIOD_LABEL, NAV_ITEMS } from "@/lib/constants";
-import { currentUser } from "@/mocks/financial-dashboard.mock";
+import { useSession } from "@/features/auth/hooks/use-session";
 import { useSidebar } from "./use-sidebar";
 
 export function AppHeader() {
   const { resolvedTheme, setTheme } = useTheme();
   const { toggle } = useSidebar();
   const pathname = usePathname();
-  const firstName = currentUser.name.split(" ")[0];
+  const { user } = useSession();
+  const firstName = user?.name.split(" ")[0] ?? "";
 
   const activeItem =
     NAV_ITEMS.find(

@@ -1,31 +1,57 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useLoginMutation, useMeQuery } from "@/gql";
 import { PasswordInput } from "./password-input";
 import { GoogleButton } from "./google-button";
 import { Field, AuthDivider } from "./field";
 import { loginSchema, type LoginValues } from "../schemas/auth.schema";
 
 export function LoginForm() {
-  const router = useRouter();
+  const router = useTransitionRouter();
+  const queryClient = useQueryClient();
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "", rememberMe: false },
   });
 
-  // Sin backend todavía: simulamos el acceso y entramos al dashboard.
-  const onSubmit = handleSubmit(() => {
-    router.push("/dashboard");
+  const loginMutation = useLoginMutation({
+    onSuccess: async () => {
+      // Precargamos `me` (con la cookie ya seteada) ANTES de navegar:
+      // así el guard del dashboard no muestra spinner y la entrada es suave.
+      try {
+        await queryClient.fetchQuery({
+          queryKey: useMeQuery.getKey(),
+          queryFn: useMeQuery.fetcher(),
+        });
+      } catch {
+        // Si fallara, el AuthGuard se encarga de la sesión.
+      }
+      router.push("/dashboard");
+    },
+    onError: () => {
+      setServerError("Correo o contraseña incorrectos.");
+    },
+  });
+
+  const onSubmit = handleSubmit((values) => {
+    setServerError(null);
+    loginMutation.mutate({
+      input: { email: values.email, password: values.password },
+    });
   });
 
   return (
@@ -44,6 +70,12 @@ export function LoginForm() {
         <AuthDivider label="o con tu correo" />
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+          {serverError && (
+            <p className="rounded-xl border border-negative/20 bg-negative/10 px-3.5 py-2.5 text-[13px] font-medium text-negative">
+              {serverError}
+            </p>
+          )}
+
           <Field label="Correo electrónico" htmlFor="email" error={errors.email?.message}>
             <Input
               id="email"
@@ -77,8 +109,13 @@ export function LoginForm() {
 
           <Checkbox label="Recordarme" {...register("rememberMe")} />
 
-          <Button type="submit" size="lg" className="mt-1 w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Entrando…" : "Entrar"}
+          <Button
+            type="submit"
+            size="lg"
+            className="mt-1 w-full"
+            disabled={loginMutation.isPending}
+          >
+            {loginMutation.isPending ? "Entrando…" : "Entrar"}
           </Button>
         </form>
       </div>

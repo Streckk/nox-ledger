@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Link } from "next-view-transitions";
 import { Settings, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { APP_NAME, APP_PLAN, NAV_ITEMS } from "@/lib/constants";
-import { currentUser } from "@/mocks/financial-dashboard.mock";
+import { useSession } from "@/features/auth/hooks/use-session";
 import { useSidebar } from "./use-sidebar";
 
 function initialsOf(name: string): string {
@@ -20,6 +20,9 @@ function initialsOf(name: string): string {
 /** Contenido compartido por el sidebar de escritorio y el drawer móvil. */
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const { user } = useSession();
+  const displayName = user?.name ?? "";
+  const image = user?.image;
 
   return (
     <>
@@ -70,12 +73,19 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
         aria-current={pathname === "/configuracion" ? "page" : undefined}
         className="mt-auto flex w-full items-center gap-3 border-t border-hairline px-1 pb-1 pt-4 text-left transition-opacity hover:opacity-80"
       >
-        <span className="flex size-[34px] shrink-0 items-center justify-center rounded-full border border-hairline-strong bg-elevated text-[13px] font-bold">
-          {initialsOf(currentUser.name)}
+        <span className="flex size-[34px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-hairline-strong bg-elevated text-[13px] font-bold">
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={image} alt="" className="size-full object-cover" />
+          ) : displayName ? (
+            initialsOf(displayName)
+          ) : (
+            "··"
+          )}
         </span>
         <span className="min-w-0">
           <span className="block truncate text-[13px] font-semibold">
-            {currentUser.name}
+            {displayName}
           </span>
           <span className="block text-[11px] text-muted">{APP_PLAN}</span>
         </span>
