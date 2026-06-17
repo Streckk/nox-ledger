@@ -22,6 +22,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { user } = useSession();
   const displayName = user?.name ?? "";
+  const image = user?.image;
 
   return (
     <>
@@ -72,8 +73,15 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
         aria-current={pathname === "/configuracion" ? "page" : undefined}
         className="mt-auto flex w-full items-center gap-3 border-t border-hairline px-1 pb-1 pt-4 text-left transition-opacity hover:opacity-80"
       >
-        <span className="flex size-[34px] shrink-0 items-center justify-center rounded-full border border-hairline-strong bg-elevated text-[13px] font-bold">
-          {displayName ? initialsOf(displayName) : "··"}
+        <span className="flex size-[34px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-hairline-strong bg-elevated text-[13px] font-bold">
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={image} alt="" className="size-full object-cover" />
+          ) : displayName ? (
+            initialsOf(displayName)
+          ) : (
+            "··"
+          )}
         </span>
         <span className="min-w-0">
           <span className="block truncate text-[13px] font-semibold">

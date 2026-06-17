@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import type { CurrencyCode } from "@/types/finance";
-import { useLogoutMutation, useMeQuery } from "@/gql";
+import { useLogoutMutation, useMeQuery, useUpdateProfileMutation } from "@/gql";
 import { useSession } from "@/features/auth/hooks/use-session";
 import { ProfileSummaryCard } from "./profile-summary-card";
 import { SettingsSection } from "./settings-section";
@@ -50,6 +50,13 @@ export function SettingsView() {
     },
   });
 
+  const updateProfileMutation = useUpdateProfileMutation({
+    onSuccess: () => {
+      // Refresca `me` para que la nueva foto se vea en perfil, header y sidebar.
+      void queryClient.invalidateQueries({ queryKey: useMeQuery.getKey() });
+    },
+  });
+
   const name = useWatch({ control, name: "name" }) ?? "";
   const email = useWatch({ control, name: "email" }) ?? "";
 
@@ -67,7 +74,14 @@ export function SettingsView() {
 
   return (
     <form onSubmit={onSubmit} className="mx-auto flex max-w-[940px] flex-col gap-3.5">
-      <ProfileSummaryCard name={name} email={email} saved={saved} />
+      <ProfileSummaryCard
+        name={name}
+        email={email}
+        image={user?.image ?? null}
+        saved={saved}
+        uploading={updateProfileMutation.isPending}
+        onImageChange={(image) => updateProfileMutation.mutate({ input: { image } })}
+      />
 
       <div className="overflow-hidden rounded-2xl border border-hairline bg-surface">
         <SettingsSection
