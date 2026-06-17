@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Space_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "@/components/providers";
 import { APP_NAME } from "@/lib/constants";
 import "./globals.css";
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${archivo.variable} ${spaceMono.variable} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import type { CurrencyCode } from "@/types/finance";
-import { currentUser } from "@/mocks/financial-dashboard.mock";
+import { useLogoutMutation, useMeQuery } from "@/gql";
+import { useSession } from "@/features/auth/hooks/use-session";
 import { ProfileSummaryCard } from "./profile-summary-card";
 import { SettingsSection } from "./settings-section";
 import { ThemeSegment } from "./theme-segment";
@@ -22,6 +25,9 @@ import {
 
 /** Panel de administración de la cuenta del usuario. */
 export function SettingsView() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { user } = useSession();
   const [saved, setSaved] = useState(false);
   const [currency, setCurrency] = useState<CurrencyCode>("MXN");
   const [notifications, setNotifications] =
@@ -34,7 +40,14 @@ export function SettingsView() {
     formState: { errors },
   } = useForm<ProfileValues>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { name: currentUser.name, email: currentUser.email },
+    defaultValues: { name: user?.name ?? "", email: user?.email ?? "" },
+  });
+
+  const logoutMutation = useLogoutMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: useMeQuery.getKey() });
+      router.replace("/login");
+    },
   });
 
   const name = useWatch({ control, name: "name" }) ?? "";
@@ -144,8 +157,13 @@ export function SettingsView() {
         <p className="font-mono text-xs text-muted">
           Sesión iniciada en este dispositivo
         </p>
-        <Button type="button" variant="outline">
-          Cerrar sesión
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => logoutMutation.mutate({})}
+          disabled={logoutMutation.isPending}
+        >
+          {logoutMutation.isPending ? "Cerrando…" : "Cerrar sesión"}
         </Button>
       </div>
     </form>
