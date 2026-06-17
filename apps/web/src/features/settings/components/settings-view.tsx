@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -25,7 +25,7 @@ import {
 
 /** Panel de administración de la cuenta del usuario. */
 export function SettingsView() {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const queryClient = useQueryClient();
   const { user } = useSession();
   const [saved, setSaved] = useState(false);

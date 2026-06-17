@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <div className="flex min-h-screen w-full bg-canvas">
       <AuthBrandPanel />
 
-      <div className="relative flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-8">
+      <div className="relative flex flex-1 flex-col items-center justify-start px-4 pb-12 pt-[12vh] sm:px-8">
         <ThemeToggle className="absolute right-4 top-4 sm:right-6 sm:top-6" />
 
         <div className="w-full max-w-[400px]">

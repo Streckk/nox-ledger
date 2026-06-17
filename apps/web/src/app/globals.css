@@ -122,3 +122,55 @@ input[type="range"].nx-range::-moz-range-thumb {
   cursor: pointer;
   border: 3px solid var(--surface);
 }
+
+/* ===== Animaciones sutiles (entrada / transición de pantalla) ===== */
+@keyframes nx-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes nx-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade + leve elevación; usar en contenido que entra/cambia. */
+.nx-rise {
+  animation: nx-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Solo opacidad; para superficies grandes (p. ej. panel de marca). */
+.nx-fade {
+  animation: nx-fade 0.6s ease both;
+}
+
+/* ===== Transición de rutas (View Transitions API) =====
+   Fade simple: cross-fade rápido y limpio entre pantallas. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+  animation-timing-function: ease;
+}
+
+/* Accesibilidad: sin movimiento si el usuario lo prefiere. */
+@media (prefers-reduced-motion: reduce) {
+  .nx-rise,
+  .nx-fade {
+    animation: none;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

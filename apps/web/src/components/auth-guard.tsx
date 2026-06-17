@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { Loader2 } from "lucide-react";
 import { useSession } from "@/features/auth/hooks/use-session";
 
 /** Protege el área autenticada: redirige a /login si no hay sesión. */
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const { isLoading, isAuthenticated } = useSession();
 
   useEffect(() => {

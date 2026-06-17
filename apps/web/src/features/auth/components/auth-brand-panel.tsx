@@ -22,7 +22,7 @@ const HIGHLIGHTS = [
 /** Panel lateral de marca (oscuro) para las pantallas de autenticación. Solo en lg+. */
 export function AuthBrandPanel() {
   return (
-    <aside className="relative hidden w-[44%] max-w-[520px] flex-col justify-between overflow-hidden bg-invert p-12 text-invert-ink lg:flex">
+    <aside className="nx-fade relative hidden w-[44%] max-w-[520px] flex-col justify-between overflow-hidden bg-invert p-12 text-invert-ink lg:flex">
       <Brand tone="onDark" size="lg" />
 
       <div className="max-w-[380px]">
@@ -35,10 +35,14 @@ export function AuthBrandPanel() {
         </p>
 
         <ul className="mt-10 flex flex-col gap-5">
-          {HIGHLIGHTS.map((item) => {
+          {HIGHLIGHTS.map((item, index) => {
             const Icon = item.icon;
             return (
-              <li key={item.title} className="flex gap-3.5">
+              <li
+                key={item.title}
+                className="nx-rise flex gap-3.5"
+                style={{ animationDelay: `${160 + index * 90}ms` }}
+              >
                 <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/5">
                   <Icon className="size-[18px]" strokeWidth={2} />
                 </span>

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +15,7 @@ import { Field, AuthDivider } from "./field";
 import { registerSchema, type RegisterValues } from "../schemas/auth.schema";
 
 export function RegisterForm() {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const queryClient = useQueryClient();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -34,7 +33,15 @@ export function RegisterForm() {
 
   const registerMutation = useRegisterMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: useMeQuery.getKey() });
+      // Precargamos `me` antes de navegar para evitar el spinner del guard.
+      try {
+        await queryClient.fetchQuery({
+          queryKey: useMeQuery.getKey(),
+          queryFn: useMeQuery.fetcher(),
+        });
+      } catch {
+        // El AuthGuard se encarga si algo falla.
+      }
       router.push("/dashboard");
     },
     onError: () => {

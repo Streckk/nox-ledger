@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Link } from "next-view-transitions";
 import { Settings, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { APP_NAME, APP_PLAN, NAV_ITEMS } from "@/lib/constants";

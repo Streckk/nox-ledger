@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +15,7 @@ import { Field, AuthDivider } from "./field";
 import { loginSchema, type LoginValues } from "../schemas/auth.schema";
 
 export function LoginForm() {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const queryClient = useQueryClient();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -31,8 +30,16 @@ export function LoginForm() {
 
   const loginMutation = useLoginMutation({
     onSuccess: async () => {
-      // La sesión la marca la cookie httpOnly; refrescamos `me` y entramos.
-      await queryClient.invalidateQueries({ queryKey: useMeQuery.getKey() });
+      // Precargamos `me` (con la cookie ya seteada) ANTES de navegar:
+      // así el guard del dashboard no muestra spinner y la entrada es suave.
+      try {
+        await queryClient.fetchQuery({
+          queryKey: useMeQuery.getKey(),
+          queryFn: useMeQuery.fetcher(),
+        });
+      } catch {
+        // Si fallara, el AuthGuard se encarga de la sesión.
+      }
       router.push("/dashboard");
     },
     onError: () => {
