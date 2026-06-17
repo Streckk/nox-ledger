@@ -1,9 +1,14 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser from 'cookie-parser';
+import { json, urlencoded } from 'express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+
+// Límite del body: una imagen de 4MB en base64 ≈ 5.6MB + overhead.
+const BODY_LIMIT = '6mb';
 
 /** Describe la base de datos sin exponer credenciales (usuario/contraseña). */
 function describeDatabase(databaseUrl: string): string {
@@ -18,8 +23,14 @@ function describeDatabase(databaseUrl: string): string {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // Desactivamos el body parser por defecto (límite 100kb) para aplicar el nuestro.
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bodyParser: false,
+  });
   const config = app.get(ConfigService);
+
+  app.use(json({ limit: BODY_LIMIT }));
+  app.use(urlencoded({ extended: true, limit: BODY_LIMIT }));
 
   app.useGlobalPipes(
     new ValidationPipe({

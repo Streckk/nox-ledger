@@ -23,6 +23,7 @@ type Mutation {
   logout(input: RefreshInput): Boolean!
   refresh(input: RefreshInput): AuthPayload!
   register(input: RegisterInput!): AuthPayload!
+  updateProfile(input: UpdateUserInput!): User!
 }
 
 type Query {
@@ -39,10 +40,17 @@ input RegisterInput {
   password: String!
 }
 
+input UpdateUserInput {
+  email: String
+  image: String
+  name: String
+}
+
 type User {
   createdAt: DateTime!
   email: String!
   id: ID!
+  image: String
   isActive: Boolean!
   name: String!
   updatedAt: DateTime!

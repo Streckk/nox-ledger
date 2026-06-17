@@ -12,6 +12,9 @@ export class UserModel {
   @Field()
   email: string;
 
+  @Field(() => String, { nullable: true })
+  image?: string | null;
+
   @Field()
   isActive: boolean;
 

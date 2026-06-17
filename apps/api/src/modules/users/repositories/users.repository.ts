@@ -8,6 +8,12 @@ export interface CreateUserData {
   passwordHash: string;
 }
 
+export interface UpdateUserData {
+  name?: string;
+  email?: string;
+  image?: string | null;
+}
+
 /** Acceso a datos de usuarios. Única capa que habla con Prisma. */
 @Injectable()
 export class UsersRepository {
@@ -27,5 +33,9 @@ export class UsersRepository {
 
   create(data: CreateUserData): Promise<User> {
     return this.prisma.user.create({ data });
+  }
+
+  update(id: string, data: UpdateUserData): Promise<User> {
+    return this.prisma.user.update({ where: { id }, data });
   }
 }
