@@ -1,7 +1,11 @@
 import type { Money } from "./finance";
 
 /** Estado de una compra a meses. */
-export type InstallmentStatus = "on-track" | "last-month";
+export type InstallmentStatus =
+  | "al-corriente"
+  | "ultimo-mes"
+  | "atrasada"
+  | "pagada";
 
 /** Compra a meses sin intereses (MSI). */
 export interface InstallmentPurchase {

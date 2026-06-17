@@ -1,6 +1,6 @@
 import type { InstallmentPurchase } from "@/types/installment";
 
-/** Compras a meses sin intereses activas (datos mockeados). */
+/** Compras a meses sin intereses (datos mockeados). */
 export const installmentPurchases: InstallmentPurchase[] = [
   {
     id: "macbook",
@@ -12,7 +12,7 @@ export const installmentPurchases: InstallmentPurchase[] = [
     remainingMonths: 9,
     termMonths: 12,
     cardName: "Amex Gold",
-    status: "on-track",
+    status: "al-corriente",
   },
   {
     id: "iphone",
@@ -21,10 +21,10 @@ export const installmentPurchases: InstallmentPurchase[] = [
     purchasedAt: "2025-10-28",
     total: 24999,
     monthly: 2083,
-    remainingMonths: 3,
+    remainingMonths: 1,
     termMonths: 12,
     cardName: "Nu Bank",
-    status: "on-track",
+    status: "ultimo-mes",
   },
   {
     id: "fridge",
@@ -36,7 +36,7 @@ export const installmentPurchases: InstallmentPurchase[] = [
     remainingMonths: 7,
     termMonths: 12,
     cardName: "BBVA Azul",
-    status: "on-track",
+    status: "atrasada",
   },
   {
     id: "ps5",
@@ -48,7 +48,7 @@ export const installmentPurchases: InstallmentPurchase[] = [
     remainingMonths: 5,
     termMonths: 6,
     cardName: "Nu Bank",
-    status: "last-month",
+    status: "al-corriente",
   },
   {
     id: "tv",
@@ -60,6 +60,30 @@ export const installmentPurchases: InstallmentPurchase[] = [
     remainingMonths: 14,
     termMonths: 18,
     cardName: "BBVA Azul",
-    status: "on-track",
+    status: "al-corriente",
+  },
+  {
+    id: "headphones",
+    concept: "AirPods Max",
+    icon: "🎧",
+    purchasedAt: "2025-08-10",
+    total: 11499,
+    monthly: 1917,
+    remainingMonths: 0,
+    termMonths: 6,
+    cardName: "Amex Gold",
+    status: "pagada",
+  },
+  {
+    id: "watch",
+    concept: "Apple Watch Ultra",
+    icon: "⌚",
+    purchasedAt: "2025-06-02",
+    total: 21999,
+    monthly: 1833,
+    remainingMonths: 0,
+    termMonths: 12,
+    cardName: "Nu Bank",
+    status: "pagada",
   },
 ];

@@ -12,6 +12,8 @@ const badgeVariants = cva(
         solid: "bg-invert text-invert-ink",
         positive:
           "bg-positive/10 text-positive border border-positive/20",
+        negative:
+          "bg-negative/10 text-negative border border-negative/20",
         outline: "border border-hairline-strong text-ink",
       },
       size: {
