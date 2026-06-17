@@ -7,7 +7,14 @@
       "Bash(pnpm build *)",
       "Bash(mkdir -p \"\\(app\\)/dashboard\" \"\\(auth\\)/login\" \"\\(auth\\)/register\")",
       "Bash(mv dashboard/page.tsx \"\\(app\\)/dashboard/page.tsx\")",
-      "Bash(rmdir dashboard *)"
+      "Bash(rmdir dashboard *)",
+      "Bash(pnpm prisma *)",
+      "Bash(node -e \"console.log\\('prisma', require\\('prisma/package.json'\\).version\\)\")",
+      "Bash(node -e \"console.log\\('@prisma/client', require\\('@prisma/client/package.json'\\).version\\)\")",
+      "Bash(node -e \"console.log\\(Object.keys\\(require\\('prisma/config'\\)\\)\\)\")",
+      "Bash(node -e \"require\\('@prisma/adapter-pg'\\); console.log\\('sí'\\)\")",
+      "Bash(node -e \"require\\('pg'\\); console.log\\('sí'\\)\")",
+      "Bash(pnpm add *)"
     ]
   }
 }
