@@ -14,6 +14,9 @@ export const envSchema = z.object({
 
   JWT_REFRESH_SECRET: z.string().min(1, 'JWT_REFRESH_SECRET es requerida'),
   JWT_REFRESH_EXPIRES_IN: z.string().min(1).default('7d'),
+
+  // Dominio de las cookies (vacío en dev; en prod p. ej. ".nox.mx").
+  COOKIE_DOMAIN: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

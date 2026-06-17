@@ -25,7 +25,7 @@ import { UsersModule } from './modules/users/users.module';
       sortSchema: true,
       playground: false,
       introspection: process.env.NODE_ENV !== 'production',
-      context: ({ req }: { req: unknown }) => ({ req }),
+      context: ({ req, res }: { req: unknown; res: unknown }) => ({ req, res }),
     }),
     PrismaModule,
     HealthModule,

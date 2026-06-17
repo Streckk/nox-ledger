@@ -33,7 +33,9 @@ export class LoggingInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: () =>
-          this.logger.log(`${operation} ${field} ✓ ${Date.now() - startedAt}ms`),
+          this.logger.log(
+            `${operation} ${field} ✓ ${Date.now() - startedAt}ms`,
+          ),
         error: (error: Error) =>
           this.logger.warn(
             `${operation} ${field} ✗ ${error.message} (${Date.now() - startedAt}ms)`,

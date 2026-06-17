@@ -5,6 +5,7 @@ import { JwtStrategy } from '../../common/strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
+import { RefreshTokenRepository } from './repositories/refresh-token.repository';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { AuthService } from './auth.service';
     // Los secretos y expiraciones se pasan por firma en AuthService.
     JwtModule.register({}),
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy],
+  providers: [AuthService, AuthResolver, JwtStrategy, RefreshTokenRepository],
   exports: [AuthService],
 })
 export class AuthModule {}

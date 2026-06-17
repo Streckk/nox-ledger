@@ -1,6 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 
@@ -29,6 +30,7 @@ async function bootstrap() {
   );
 
   app.use(helmet());
+  app.use(cookieParser());
 
   const frontendUrl = config.getOrThrow<string>('FRONTEND_URL');
   app.enableCors({ origin: frontendUrl, credentials: true });

@@ -14,7 +14,8 @@
       "Bash(node -e \"console.log\\(Object.keys\\(require\\('prisma/config'\\)\\)\\)\")",
       "Bash(node -e \"require\\('@prisma/adapter-pg'\\); console.log\\('sí'\\)\")",
       "Bash(node -e \"require\\('pg'\\); console.log\\('sí'\\)\")",
-      "Bash(pnpm add *)"
+      "Bash(pnpm add *)",
+      "Bash(pnpm exec *)"
     ]
   }
 }
